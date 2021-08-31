@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+   <head>
+    </head>
+    <script src = "/socket.io/socket.io.js"></script>
+    <body>
+      <button id="start" onclick="toggleStart('start')">Start Bot</button>
+      <p id="playerX"></p>
+      <p id="playerY"></p>
+      <p id="health"></p>
+      <script>
+        
+        var socket = io();
+        
+        socket.on('broadcast', data => {
+          
+          //empty body without removing button
+          
+          document.getElementById("playerX").innerHTML = "X: " + data.xcoord
+          document.getElementById("playerY").innerHTML = "Y: " + data.ycoord
+          document.getElementById("health").innerHTML =  "Player Health: " + data.currentHealth + " / " + data.maxHealth
+          //document.getElementById("zone").innerHTML = "Zone: " + data.zone
+          
+        });
+        
+        function toggleStart(btnId)
+        {
+          
+          var el = document.getElementById(btnId).firstChild
+          el.data = el.data == "Start Bot" ? "Stop Bot" : "Start Bot"
+          
+          if(el.data == "Stop Bot")
+          {
+            socket.emit("start")
+          }
+          else {
+            //empty body without removing button
+            document.getElementById("playerX").innerHTML = ''
+            document.getElementById("playerY").innerHTML = ''
+            document.getElementById("health").innerHTML = ''
+            socket.emit("stop")
+          }
+          
+        }
+        
+      </script>
+    </body>
+</html>
